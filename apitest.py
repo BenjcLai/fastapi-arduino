@@ -52,13 +52,7 @@ async def receive_data(request: Request):
 async def get_data():
     """在 API 介面顯示目前收到的所有資料"""
     return {"received_data": received_data}
-
-@app.post("/clear-data")
-async def clear_data():
-    """清空 received_data 列表"""
-    received_data.clear()  # 或者 received_data = [] 也可以
-    return {"status": "ok", "message": "資料已清空"}
-    
+ 
 if __name__ == "__main__":
     # 0.0.0.0 監聽所有網路介面，Arduino 也能連線
     uvicorn.run(app, host="0.0.0.0", port=5000)
@@ -66,6 +60,7 @@ if __name__ == "__main__":
 #傳資料到這個api
 # curl -X POST http://192.168.1.217:5000/receive-data -H "Content-Type: application/json" -d "{\"temperature\":25,\"humidity\":60}"
 #{"status":"ok","received":{"temperature":25,"humidity":60}}
+
 
 
 
