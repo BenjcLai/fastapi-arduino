@@ -1,4 +1,5 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, File, UploadFile
+from fastapi.responses import FileResponse
 import uvicorn
 import pymssql
 from datetime import datetime
@@ -11,6 +12,10 @@ server = "192.168.1.217"
 user = "sa"
 password = "ben26382535"
 port =1433
+
+# 建立上傳資料夾
+UPLOAD_FOLDER = "uploads"
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 def databaseconnect():
     try :
