@@ -52,6 +52,27 @@ async def receive_data(request: Request):
 async def get_data():
     """在 API 介面顯示目前收到的所有資料"""
     return {"received_data": received_data}
+
+# 上傳圖片
+@app.post("/upload")
+async def upload_image(file: UploadFile = File(...)):
+    file_path = os.path.join(UPLOAD_FOLDER, file.filename)
+    
+    with open(file_path, "wb") as f:
+        content = await file.read()
+        f.write(content)
+    
+    return {"message": "上傳成功", "file_path": f"/{UPLOAD_FOLDER}/{file.filename}"}
+
+# 下載圖片
+@app.get("/uploads/{filename}")
+def download_image(filename: str):
+    file_path = os.path.join(UPLOAD_FOLDER, filename)
+    
+    if os.path.exists(file_path):
+        return FileResponse(file_path)
+    else:
+        return {"error": "檔案不存在"}
  
 if __name__ == "__main__":
     # 0.0.0.0 監聽所有網路介面，Arduino 也能連線
@@ -60,6 +81,7 @@ if __name__ == "__main__":
 #傳資料到這個api
 # curl -X POST http://192.168.1.217:5000/receive-data -H "Content-Type: application/json" -d "{\"temperature\":25,\"humidity\":60}"
 #{"status":"ok","received":{"temperature":25,"humidity":60}}
+
 
 
 
