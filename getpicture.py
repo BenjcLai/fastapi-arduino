@@ -28,3 +28,7 @@ def download_image(filename: str):
         return FileResponse(file_path)
     else:
         return {"error": "檔案不存在"}
+
+if __name__ == "__main__":
+    # 0.0.0.0 監聽所有網路介面，Arduino 也能連線
+    uvicorn.run(app, host="0.0.0.0", port=5000)
