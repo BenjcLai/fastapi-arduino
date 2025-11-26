@@ -8,6 +8,7 @@ import os
 app = FastAPI()
 
 received_data = []
+uploaded_files = []
 
 server = "192.168.1.217"
 user = "sa"
@@ -67,8 +68,16 @@ async def upload_image(file: UploadFile = File(...)):
     with open(file_path, "wb") as f:
         content = await file.read()
         f.write(content)
+    uploaded_files.append({
+        "filename": file.filename,
+        "upload_time": datetime.now()
+    })
     
     return {"message": "上傳成功", "file_path": f"/{UPLOAD_FOLDER}/{file.filename}"}
+
+@app.get("/upload-records")
+async def get_upload_records():
+    return uploaded_files
 
 # 下載圖片
 @app.get("/uploads/{filename}")
@@ -87,6 +96,7 @@ if __name__ == "__main__":
 #傳資料到這個api
 # curl -X POST http://192.168.1.217:5000/receive-data -H "Content-Type: application/json" -d "{\"temperature\":25,\"humidity\":60}"
 #{"status":"ok","received":{"temperature":25,"humidity":60}}
+
 
 
 
