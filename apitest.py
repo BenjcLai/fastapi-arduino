@@ -106,7 +106,7 @@ def getfireresponse():
             {
                 "role": "user",
                 "content": [
-                    {"type": "text", "text": "這是什麼圖片？"},
+                    {"type": "text", "text": "請分析這張圖片是否為火災。請只回答：是火災、不是火災"},
                     {
                         "type": "image_url",
                         "image_url": {
@@ -129,6 +129,7 @@ if __name__ == "__main__":
 #傳資料到這個api
 # curl -X POST http://192.168.1.217:5000/receive-data -H "Content-Type: application/json" -d "{\"temperature\":25,\"humidity\":60}"
 #{"status":"ok","received":{"temperature":25,"humidity":60}}
+
 
 
 
