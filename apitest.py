@@ -4,6 +4,7 @@ import uvicorn
 import pymssql
 from datetime import datetime
 import os
+import openai
 
 app = FastAPI()
 
@@ -18,6 +19,13 @@ port =1433
 # 建立上傳資料夾
 UPLOAD_FOLDER = "uploads"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
+# optional; defaults to `os.environ['OPENAI_API_KEY']`
+openai.api_key = "sk-z3w8zKSpr4jzIPCGCe81406cCc6e4047943cC118360c39F4"
+
+# all client options can be configured just like the `OpenAI` instantiation counterpart
+openai.base_url = "https://free.v36.cm/v1/"
+openai.default_headers = {"x-foo": "true"}
 
 def databaseconnect():
     try :
@@ -88,6 +96,31 @@ def download_image(filename: str):
         return FileResponse(file_path)
     else:
         return {"error": "檔案不存在"}
+
+#取得ai回答結果
+@app.get("/fireresponse")
+def getfireresponse():
+    completion1 = openai.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[
+            {
+                "role": "user",
+                "content": [
+                    {"type": "text", "text": "這是什麼圖片？"},
+                    {
+                        "type": "image_url",
+                        "image_url": {
+                            "url": "https://fastapi-arduino-1.onrender.com/uploads/fire.jpg"
+                        }
+                    }
+                ]
+            }
+        ],
+    )
+
+    print(completion1.choices[0].message.content)
+    return completion1.choices[0].message.content
+
  
 if __name__ == "__main__":
     # 0.0.0.0 監聽所有網路介面，Arduino 也能連線
@@ -96,6 +129,7 @@ if __name__ == "__main__":
 #傳資料到這個api
 # curl -X POST http://192.168.1.217:5000/receive-data -H "Content-Type: application/json" -d "{\"temperature\":25,\"humidity\":60}"
 #{"status":"ok","received":{"temperature":25,"humidity":60}}
+
 
 
 
