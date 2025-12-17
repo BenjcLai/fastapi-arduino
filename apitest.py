@@ -8,18 +8,10 @@ import openai
 
 app = FastAPI()
 
+database_data = []
 received_data = []
 fingerprint_data = []
 uploaded_files = []
-
-#server = #server = "192.
-#user = #use
-#password = #password = "
-#port =#por
-server = os.getenv("DB_HOST")
-port = os.getenv("DB_PORT")
-user = os.getenv("DB_USER")
-password = os.getenv("DB_PASSWORD")
 
 # 建立上傳資料夾
 UPLOAD_FOLDER = "uploads"
@@ -32,30 +24,23 @@ openai.api_key = "sk-z3w8zKSpr4jzIPCGCe81406cCc6e4047943cC118360c39F4"
 openai.base_url = "https://free.v36.cm/v1/"
 openai.default_headers = {"x-foo": "true"}
 
-def databaseconnect():
-    try :
-        conn = pymssql.connect(server = server ,user = user ,password = password , port = port)
-        cursor = conn.cursor()
-        sql = """SELECT TOP (1000) [Temp]
-                 ,[Humd]
-                 ,[Update_time]
-                 FROM [lala].[dbo].[TempHumid_History]
-             """
-        cursor.execute(sql)
-        result =cursor.fetchall()
-        print(result)
-        return result
-    except Exception as e:
-        print("資料庫連線或查詢失敗：", e)
-        return []
-        
-
+# 資料庫資料
 @app.get("/")
 async def root():
-    result = databaseconnect()
-    print(result)
-    return result
-
+    """在 API 介面顯示目前收到的所有資料"""
+    return {"database_data": database_data}
+    
+#接受資料庫資料
+@app.post("/database-data")
+async def databasedata(request: Request):
+    try:
+        data = await request.json()  # 解析 Arduino 送來的 JSON
+        print("收到資料:", data)     # 印出到終端
+        database_data.append(data)
+        return {"status": "ok", "received": data}
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
+        
 # POST 接收 Arduino 資料
 @app.post("/receive-data")
 async def receive_data(request: Request):
@@ -103,7 +88,7 @@ async def upload_image(file: UploadFile = File(...)):
     })
     
     return {"message": "上傳成功", "file_path": f"/{UPLOAD_FOLDER}/{file.filename}"}
-
+#圖片清單
 @app.get("/upload-records")
 async def get_upload_records():
     return uploaded_files
@@ -150,6 +135,7 @@ if __name__ == "__main__":
 #傳資料到這個api
 # curl -X POST http://192.168.1.217:5000/receive-data -H "Content-Type: application/json" -d "{\"temperature\":25,\"humidity\":60}"
 #{"status":"ok","received":{"temperature":25,"humidity":60}}
+
 
 
 
