@@ -12,10 +12,14 @@ received_data = []
 fingerprint_data = []
 uploaded_files = []
 
-server = "192.168.1.217"
-user = "sa"
-password = "ben26382535"
-port =1433
+#server = #server = "192.
+#user = #use
+#password = #password = "
+#port =#por
+server = os.getenv("DB_HOST")
+port = os.getenv("DB_PORT")
+user = os.getenv("DB_USER")
+password = os.getenv("DB_PASSWORD")
 
 # 建立上傳資料夾
 UPLOAD_FOLDER = "uploads"
@@ -146,6 +150,7 @@ if __name__ == "__main__":
 #傳資料到這個api
 # curl -X POST http://192.168.1.217:5000/receive-data -H "Content-Type: application/json" -d "{\"temperature\":25,\"humidity\":60}"
 #{"status":"ok","received":{"temperature":25,"humidity":60}}
+
 
 
 
