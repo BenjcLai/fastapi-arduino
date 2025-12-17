@@ -36,10 +36,10 @@ def databaseconnect():
     try :
         conn = pymssql.connect(server = server ,user = user ,password = password , port = port)
         cursor = conn.cursor()
-        sql = """SELECT TOP (1000) [s1]
-              ,[s2]
-              ,[s3]
-            FROM [lala].[dbo].[test1]
+        sql = """SELECT TOP (1000) [Temp]
+                 ,[Humd]
+                 ,[Update_time]
+                 FROM [lala].[dbo].[TempHumid_History]
              """
         cursor.execute(sql)
         result =cursor.fetchall()
@@ -150,6 +150,7 @@ if __name__ == "__main__":
 #傳資料到這個api
 # curl -X POST http://192.168.1.217:5000/receive-data -H "Content-Type: application/json" -d "{\"temperature\":25,\"humidity\":60}"
 #{"status":"ok","received":{"temperature":25,"humidity":60}}
+
 
 
 
