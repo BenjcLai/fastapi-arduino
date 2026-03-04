@@ -8,7 +8,7 @@ import openai
 
 app = FastAPI()
 
-database_data = []
+power_data = []
 received_data = []
 fingerprint_data = []
 uploaded_files = []
@@ -24,24 +24,27 @@ openai.api_key = "sk-z3w8zKSpr4jzIPCGCe81406cCc6e4047943cC118360c39F4"
 openai.base_url = "https://free.v36.cm/v1/"
 openai.default_headers = {"x-foo": "true"}
 
-# 資料庫資料
 @app.get("/")
 async def root():
-    """在 API 介面顯示目前收到的所有資料"""
-    return {"database_data": database_data}
+   print("hello welcome to my project!)
     
-#接受資料庫資料
-@app.post("/database-data")
+#POST 接收瓦數資料
+@app.post("/repower-data")
 async def databasedata(request: Request):
     try:
         data = await request.json()  # 解析 Arduino 送來的 JSON
         print("收到資料:", data)     # 印出到終端
-        database_data.append(data)
+        power_data.append(data)
         return {"status": "ok", "received": data}
     except Exception as e:
         return {"status": "error", "message": str(e)}
-        
-# POST 接收 Arduino 資料
+
+@app.get("/power-data")
+async def root():
+    """在 API 介面顯示目前收到的所有資料"""
+    return {"power_data": power_data}
+    
+# POST 接收 Arduino 溫溼度資料
 @app.post("/receive-data")
 async def receive_data(request: Request):
     try:
@@ -58,6 +61,7 @@ async def get_data():
     """在 API 介面顯示目前收到的所有資料"""
     return {"received_data": received_data}
 
+#POST 接收指紋資料
 @app.post("/fingerprint-data")
 async def received_fingerprint_data(request: Request):
     try:
@@ -74,7 +78,7 @@ async def get_data():
     """在 API 介面顯示目前收到的所有資料"""
     return {"fingerprint_data": fingerprint_data}
 
-# 上傳圖片
+#POST 接收火災圖片
 @app.post("/upload")
 async def upload_image(file: UploadFile = File(...)):
     file_path = os.path.join(UPLOAD_FOLDER, file.filename)
@@ -135,6 +139,7 @@ if __name__ == "__main__":
 #傳資料到這個api
 # curl -X POST http://192.168.1.217:5000/receive-data -H "Content-Type: application/json" -d "{\"temperature\":25,\"humidity\":60}"
 #{"status":"ok","received":{"temperature":25,"humidity":60}}
+
 
 
 
