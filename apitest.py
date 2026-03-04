@@ -26,7 +26,7 @@ openai.default_headers = {"x-foo": "true"}
 
 @app.get("/")
 async def root():
-   print("hello welcome to my project!)
+   print("hello welcome to my project!")
     
 #POST 接收瓦數資料
 @app.post("/repower-data")
@@ -139,6 +139,7 @@ if __name__ == "__main__":
 #傳資料到這個api
 # curl -X POST http://192.168.1.217:5000/receive-data -H "Content-Type: application/json" -d "{\"temperature\":25,\"humidity\":60}"
 #{"status":"ok","received":{"temperature":25,"humidity":60}}
+
 
 
 
