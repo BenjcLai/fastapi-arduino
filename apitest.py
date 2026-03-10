@@ -39,6 +39,12 @@ async def root():
         <body>
             <h1>你好，FastAPI！</h1>
             <p>這是一個從 Python 後端回傳的 HTML 頁面。</p>
+            <nav>
+                <a href='https://fastapi-arduino-1.onrender.com/power-data' target='_blank'> 瓦數 </a>
+                <a href='https://fastapi-arduino-1.onrender.com/data' target='_blank'> 溫溼度 </a>
+                <a href='https://fastapi-arduino-1.onrender.com/fingerdata' target='_blank'> 指紋 </a>
+                <a href='https://fastapi-arduino-1.onrender.com/fireresponse' target='_blank'> 火災辨識結果 </a>
+            </nav>
         </body>
     </html>
     """
@@ -154,6 +160,7 @@ if __name__ == "__main__":
 #傳資料到這個api
 # curl -X POST http://192.168.1.217:5000/receive-data -H "Content-Type: application/json" -d "{\"temperature\":25,\"humidity\":60}"
 #{"status":"ok","received":{"temperature":25,"humidity":60}}
+
 
 
 
