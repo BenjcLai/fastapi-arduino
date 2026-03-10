@@ -24,9 +24,24 @@ openai.api_key = "sk-z3w8zKSpr4jzIPCGCe81406cCc6e4047943cC118360c39F4"
 openai.base_url = "https://free.v36.cm/v1/"
 openai.default_headers = {"x-foo": "true"}
 
-@app.get("/")
+@app.get("/", response_class=HTMLResponse)
 async def root():
    print("hello welcome to my project!")
+   return """
+    <html>
+        <head>
+            <title>我的 FastAPI 應用</title>
+            <style>
+                body { font-family: sans-serif; text-align: center; padding-top: 50px; }
+                h1 { color: #05998b; }
+            </style>
+        </head>
+        <body>
+            <h1>你好，FastAPI！</h1>
+            <p>這是一個從 Python 後端回傳的 HTML 頁面。</p>
+        </body>
+    </html>
+    """
     
 #POST 接收瓦數資料
 @app.post("/repower-data")
@@ -139,6 +154,7 @@ if __name__ == "__main__":
 #傳資料到這個api
 # curl -X POST http://192.168.1.217:5000/receive-data -H "Content-Type: application/json" -d "{\"temperature\":25,\"humidity\":60}"
 #{"status":"ok","received":{"temperature":25,"humidity":60}}
+
 
 
 
