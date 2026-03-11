@@ -55,6 +55,7 @@ async def databasedata(request: Request):
     try:
         data = await request.json()  # 解析 Arduino 送來的 JSON
         print("收到資料:", data)     # 印出到終端
+        data["received_time"] = datetime.now()
         power_data.append(data)
         return {"status": "ok", "received": data}
     except Exception as e:
@@ -160,6 +161,7 @@ if __name__ == "__main__":
 #傳資料到這個api
 # curl -X POST http://192.168.1.217:5000/receive-data -H "Content-Type: application/json" -d "{\"temperature\":25,\"humidity\":60}"
 #{"status":"ok","received":{"temperature":25,"humidity":60}}
+
 
 
 
